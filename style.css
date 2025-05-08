@@ -1,0 +1,198 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: margin-left 0.3s;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    max-width: 100%;
+    gap: 2px;
+    background: #ffffff;
+}
+
+/* Sidebar styling */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    background: linear-gradient(180deg, #1a1a1a, #ffffff);
+    padding-top: 60px;
+    transition: 0.3s;
+}
+
+/* Sidebar links */
+.sidebar a {
+    padding: 15px 20px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+/* Button to open sidebar */
+.open-btn {
+  
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    position: absolute;
+    top: 20px;
+    left: 0px;
+}
+
+/* Close button */
+.close-btn {
+    
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 25px;
+    color: white;
+    cursor: pointer;
+}
+
+.container {
+    z-index: -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row; /* or column, if you want them stacked vertically */
+    width: 100%;
+    gap: 50px;
+    margin-top: 0; /* Push it to the top */
+    padding-top: 20px; /* Optional: for some breathing room from the top */
+    position: relative; /* Restore normal flow if you removed `absolute` */
+}
+
+.heading{
+       
+        color: 22333B;
+       
+
+}
+.imag{
+    left : 0;
+    height : 100px;
+    width: 100px;
+}
+
+.main-box {
+    display: flex;
+    justify-content: center; /* centers the boxes horizontally */
+    align-items: center;     /* centers the boxes vertically */
+    flex-direction: row;
+    flex-wrap: wrap;         /* optional: allows wrapping to next line if needed */
+    gap: 15px;
+    height: 300px;
+    width: 100%;
+    padding: 20px;           /* optional: some padding */
+    box-sizing: border-box;  /* makes sure padding doesn't mess up width */
+}
+
+
+
+ .box{
+    width:60%;
+    height:70%;
+    max-width:200px;
+    max-height:300px;
+    border:1px solid black;
+    border-radius: 5px;
+    overflow: hidden;
+
+}
+
+.box img{
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    cursor:pointer;
+    transition: all;
+    transition-duration: 0.2s;
+}
+
+.box img:hover{
+  transform: scale(1.05);
+}
+
+
+#model {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 100 !important;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.55);
+  
+}
+
+.model-container {
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #ffffff;
+  gap: 20px; /* Ensures consistent spacing between img, info, and name */
+}
+
+
+.model-container img {
+  height: 300px;
+  margin-left: 0; /* Was -100px, which pushed everything */
+}
+
+
+#info {
+  color: #222;
+  flex: 1;
+}
+
+#name {
+  flex: 0 0 auto;
+  font-size: 20px;
+  color: #333;
+  margin-top: 100px;
+  text-align: center;
+  max-width: 150px;
+}
+
+
+/* Close button inside modal */
+#model .close-btn {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+}
+
+
+  
+
+  #chart-section {
+    width: 90%;
+    margin-top: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

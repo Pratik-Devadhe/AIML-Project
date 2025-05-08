@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="mySidebar">
+        <span class="close-btn" onclick="closeSidebar()">×</span>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+        <a href="#" style="bottom: 2px;">Sign Out</a>
+    </div>
+
+    <button class="open-btn" onclick="openSidebar()">☰</button>
+
+    <div class="container">
+        <img class="imag" src="1.png">
+        <h1 class="heading">SPORTS ANALYSIS</h1>
+        <img class="imag" src="1.png">
+    </div>
+
+    <!-- Player Thumbnails -->
+    <div class="main-box">
+        <div class="box" onclick="openModal(this)" data-player="Virat Kohli"><img src="photo/virat kohli.jpg"></div>
+        <div class="box" onclick="openModal(this)" data-player="Faf du Plessis"><img src="photo/faf du plessis.webp"></div>
+        <div class="box" onclick="openModal(this)" data-player="Glenn Maxwell"><img src="photo/glenn maxwell.webp"></div>
+        <div class="box" onclick="openModal(this)" data-player="Dinesh Kartik"><img src="photo/dinesh kartik.webp"></div>
+        <div class="box" onclick="openModal(this)" data-player="Rajat Patidar"><img src="photo/Rajat Patidar.jpg"></div>
+        <div class="box" onclick="openModal(this)" data-player="Shahbaz Ahmed"><img src="photo/Shahbaz Ahmed.png"></div>
+        <div class="box" onclick="openModal(this)" data-player="Mahipal Lomror"><img src="photo/Mahipal Lomror.png"></div>
+        <div class="box" onclick="openModal(this)" data-player="Harshal Patel"><img src="photo/Harshal Patel.jpg"></div>
+        <div class="box" onclick="openModal(this)" data-player="Wanindu Hasaranga"><img src="photo/Wanindu Hasaranga.webp"></div>
+        <div class="box" onclick="openModal(this)" data-player="David Willey"><img src="photo/David Willey.webp"></div>
+        <div class="box" onclick="openModal(this)" data-player="Mohammed Siraj"><img src="photo/siraj.webp"></div>
+        
+    </div>
+
+    <!-- Chart Section -->
+    <div id="chart-section">
+        <canvas id="analysisChart"></canvas>
+    </div>
+
+    <!-- Modal Popup -->
+    <div id="model">
+        <div class="close-btn" onclick="closeModal()">&times;</div>
+        <div class="model-container">
+            <img id="modalImage" src="" alt="Player Image">
+            <div id="info"></div>
+            <div id="name"></div>
+        </div>
+    </div>
+
+    <!-- Script Section -->
+    <script>
+        function openSidebar() {
+            document.getElementById("mySidebar").style.left = "0";
+        }
+
+        function closeSidebar() {
+            document.getElementById("mySidebar").style.left = "-250px";
+        }
+
+        function openModal(element) {
+    const image = element.querySelector("img");
+    const imgSrc = image.src;
+    const playerName = element.getAttribute("data-player");
+
+    Papa.parse("RCB_Player_Stats_IPL2024.csv", {
+        download: true,
+        header: true,
+        complete: function(results) {
+            const players = results.data;
+            const player = players.find(p =>
+                p["Player"]?.trim().toLowerCase() === playerName.toLowerCase()
+            );
+
+            if (player) {
+                const modal = document.getElementById("model");
+                const container = document.querySelector(".model-container");
+
+                document.getElementById("modalImage").src = imgSrc;
+                document.getElementById("info").innerHTML = `
+                    <p><strong>Runs:</strong> ${player["Runs"]}</p>
+                    <p><strong>Balls Faced:</strong> ${player["Balls Faced"]}</p>
+                    <p><strong>Fours:</strong> ${player["Fours"]}</p>
+                    <p><strong>Sixes:</strong> ${player["Sixes"]}</p>
+                    <p><strong>Strike Rate:</strong> ${player["Strike Rate"]}</p>
+                    <p><strong>Wickets Taken:</strong> ${player["Wickets Taken"]}</p>
+                    <p><strong>Overs Bowled:</strong> ${player["Overs Bowled"]}</p>
+                    <p><strong>Catches:</strong> ${player["Catches"]}</p>
+                    <p><strong>Run Outs:</strong> ${player["Run Outs"]}</p>
+                    <p><strong>Extras:</strong> ${player["Extras"]}</p>
+                `;
+                document.getElementById("name").innerHTML = `<h2>${player["Player"]}</h2>`;
+
+                modal.style.display = "flex";
+            } else {
+                alert("Player data not found in CSV.");
+            }
+        }
+    });
+}
+
+
+        function getPlayerNameFromImage(imgSrc) {
+            const fileName = imgSrc.split("/").pop().split(".")[0];
+            return fileName.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        function closeModal() {
+            document.getElementById("model").style.display = "none";
+        }
+
+        // Chart Rendering
+        fetch('player_analysis.json')
+            .then(response => response.json())
+            .then(data => {
+                const players = Object.keys(data);
+                const runs = players.map(p => data[p]["Runs"]);
+                const strikeRates = players.map(p => data[p]["Strike Rate"]);
+                const probabilities = players.map(p => data[p]["Performance Probability"]);
+
+                const ctx = document.getElementById('analysisChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: players,
+                        datasets: [
+                            {
+                                label: 'Runs',
+                                data: runs,
+                                backgroundColor: 'rgba(75, 192, 192, 1)'
+                            },
+                            {
+                                label: 'Strike Rate',
+                                data: strikeRates,
+                                backgroundColor: 'rgba(255, 159, 64, 1)'
+                            },
+                            {
+                                label: 'Performance Probability %',
+                                data: probabilities,
+                                backgroundColor: 'rgba(153, 102, 255, 1)'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'RCB Players: Runs, Strike Rate & Performance Probability'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(err => console.error("Chart data loading error:", err));
+    </script>
+</body>
+</html>
